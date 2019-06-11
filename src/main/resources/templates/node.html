@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Administration</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/css/_all-skins.min.css">
+    <!-- Morris chart -->
+
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+        #main {
+
+            min-height: 550px;
+        }
+
+    </style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="/index" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>A</b>LT</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Admin</b>LTE</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="/image/user.jpg" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>Admin</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="active treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Statistics</span>
+                        <span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+							</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/index"><i class="fa fa-circle-o"></i>open app</a></li>
+                        <li class="active"><a href="/node"><i class="fa fa-circle-o"></i> connect tag</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                <i class="fa fa-dashboard"></i>
+                Dashboard
+
+                <small>Control panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">First Week<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="getSomeWeekCounts(1)">First Week</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="getSomeWeekCounts(2)">Second Week</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="getSomeWeekCounts(3)">Third Week</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="getSomeWeekCounts(4)">Fourth Week</a></li>
+                    </ul>
+                </div>
+            </ol>
+        </section>
+
+
+        <!-- Main content -->
+        <section class="content" id="main">
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2014-2018 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+        reserved.
+    </footer>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="/script/jquery.min.js"></script>
+<script src="/script/echarts.min.js"></script>
+
+<!-- Bootstrap 3.3.7 -->
+<script src="/script/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/script/adminlte.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/script/dashboard.js"></script>
+<script src="/script/common.js"></script>
+</body>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    function getSomeWeekCounts(value) {
+        var someWeek = getSomeWeek(value);
+        $("#dropdownMenu1").text(someWeek);
+        var cycleDate = getDate(value);
+        $.getJSON("/tag/week", {week: value}, function (data) {
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: 'Counts Of Connect tag'
+                },
+                tooltip: {}, //提示框
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                legend: { //图例
+                    data:['counts']
+                },
+                xAxis: { //x轴坐标系
+                    data: cycleDate
+                },
+                yAxis: {}, //y轴坐标系
+                series: [{ //列表，确定图表类型、数据等
+                    name: 'counts',
+                    type: 'bar',
+                    data: data
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        });
+    }
+
+    $(function () {
+        $.getJSON("/tag/week", {week: 1}, function (data) {
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: 'Counts Of Connect tag'
+                },
+                tooltip: {}, //提示框
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                legend: { //图例
+                    data:['counts']
+                },
+                xAxis: { //x轴坐标系
+                    data: ["2018-12-06", "2018-12-07", "2018-12-08", "2018-12-09", "2018-12-10", "2018-12-11", "2018-12-12"]
+                },
+                yAxis: {}, //y轴坐标系
+                series: [{ //列表，确定图表类型、数据等
+                    name: 'counts',
+                    type: 'bar',
+                    data: data
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+
+        });
+    });
+</script>
+</html>
